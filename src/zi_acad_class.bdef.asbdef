@@ -1,0 +1,84 @@
+managed implementation in class ZBP_ACAD_CLASS unique;
+strict ( 2 );
+
+define behavior for ZI_ACAD_CLASS alias Class
+persistent table zacad_class
+lock master
+authorization master ( global )
+etag master LocalLastChangedAt
+{
+  field ( numbering : managed, readonly ) ClassUuid;
+  field ( readonly ) Status, CreatedBy, CreatedAt, LastChangedBy,
+                     LastChangedAt, LocalLastChangedAt,
+                     PassPercentage, FailPercentage, StudentCount;
+
+  create;
+  update ( features : instance );
+  delete ( features : instance );
+
+  action ( features : instance ) lockClass result [1] $self;
+  action ( features : instance ) unlockClass result [1] $self;
+
+  determination setDefaultStatus on modify { create; }
+
+  association _Exam { create; }
+
+  mapping for zacad_class
+  {
+    ClassUuid          = class_uuid;
+    ClassId            = class_id;
+    CourseName         = course_name;
+    FacultyId          = faculty_id;
+    Status             = status;
+    StudentCount       = student_count;
+    PassPercentage     = pass_percentage;
+    FailPercentage     = fail_percentage;
+    CreatedBy          = created_by;
+    CreatedAt          = created_at;
+    LastChangedBy      = last_changed_by;
+    LastChangedAt      = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}
+
+define behavior for ZI_ACAD_EXAM alias Exam
+persistent table zacad_exam
+lock dependent by _Class
+authorization dependent by _Class
+etag master LocalLastChangedAt
+{
+  field ( numbering : managed, readonly ) ExamUuid;
+  field ( readonly ) ClassUuid, MarkStatus, CreatedBy, CreatedAt,
+                     LastChangedBy, LastChangedAt, LocalLastChangedAt;
+
+  update ( features : instance );
+  delete ( features : instance );
+
+  validation validateRules on save { field Marks, ExamDate; create; update; }
+  determination calculatePercentages on save { create; update; delete; }
+  determination determineMarkStatus on modify { field Marks; create; }
+
+  association _Class;
+
+  side effects {
+    /* ADDED StudentCount to the $self affects line */
+    $self affects field _Class.PassPercentage, field _Class.FailPercentage, field _Class.StudentCount;
+    field Marks affects field _Class.PassPercentage, field _Class.FailPercentage;
+  }
+
+  mapping for zacad_exam
+  {
+    ExamUuid           = exam_uuid;
+    ClassUuid          = class_uuid;
+    ExamDate           = exam_date;
+    StudentId          = student_id;
+    StudentName        = student_name;
+    Marks              = marks;
+    MarkStatus         = mark_status;
+    CreatedBy          = created_by;
+    CreatedAt          = created_at;
+    LastChangedBy      = last_changed_by;
+    LastChangedAt      = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}

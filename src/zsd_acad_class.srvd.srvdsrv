@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service Definition'
+define service ZSD_ACAD_CLASS {
+  expose ZC_ACAD_CLASS as Class;
+  expose ZC_ACAD_EXAM  as Exam;
+}

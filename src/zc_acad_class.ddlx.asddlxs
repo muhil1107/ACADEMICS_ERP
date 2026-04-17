@@ -1,0 +1,50 @@
+@Metadata.layer: #CUSTOMER
+@UI.headerInfo: {
+  typeName:       'Class',
+  typeNamePlural: 'Classes',
+  title:          { type: #STANDARD, value: 'ClassId'  },
+  description:    { type: #STANDARD, value: 'CourseName' }
+}
+annotate view ZC_ACAD_CLASS with
+{
+  @UI.facet: [
+    { id: 'ClassInfo', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Class Details', position: 10 },
+    { id: 'ExamLine', purpose: #STANDARD, type: #LINEITEM_REFERENCE, label: 'Exam Records', position: 20, targetElement: '_Exam' }
+  ]
+
+  @UI.hidden: true  
+  @UI.lineItem:       [{ position: 50, type: #FOR_ACTION, dataAction: 'lockClass', label: 'Lock Class' }]
+  @UI.identification: [{ position: 50, type: #FOR_ACTION, dataAction: 'lockClass', label: 'Lock Class' },
+                       { position: 55, type: #FOR_ACTION, dataAction: 'unlockClass', label: 'Unlock Class' }]
+  ClassUuid; 
+
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem:       [{ position: 10, label: 'Class ID' }]
+  @UI.identification: [{ position: 10, label: 'Class ID'  }]
+  ClassId;
+
+  @UI.lineItem:       [{ position: 20, label: 'Course Name' }]
+  @UI.identification: [{ position: 20, label: 'Course Name'  }]
+  CourseName;
+
+  @UI.lineItem:       [{ position: 30, label: 'Faculty ID' }]
+  @UI.identification: [{ position: 30, label: 'Faculty ID'  }]
+  FacultyId;
+
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem:       [{ position: 40, label: 'Status' }]
+  @UI.identification: [{ position: 40, label: 'Status'  }]
+  Status;
+  
+  @UI.lineItem:       [{ position: 42, label: 'Total Students' }]
+  @UI.identification: [{ position: 42, label: 'Total Students'  }]
+  StudentCount;
+
+  @UI.lineItem:       [{ position: 45, label: 'Pass %' }]
+  @UI.identification: [{ position: 45, label: 'Pass %'  }]
+  PassPercentage;
+
+  @UI.lineItem:       [{ position: 46, label: 'Fail %' }]
+  @UI.identification: [{ position: 46, label: 'Fail %'  }]
+  FailPercentage;
+}

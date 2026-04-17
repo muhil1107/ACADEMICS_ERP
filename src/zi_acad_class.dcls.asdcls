@@ -1,0 +1,10 @@
+@EndUserText.label: 'access control'
+@MappingRole: true
+define role ZI_ACAD_CLASS {
+    grant
+        select
+            on
+                ZI_ACAD_CLASS
+                    where ( ) = aspect pfcg_auth( S_TABU_NAM, ACTVT = '03', TABLE = 'ZI_ACAD_CLASS' );
+                        
+}
